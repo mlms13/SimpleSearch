@@ -42,6 +42,17 @@ SimpleSearch.matches = function (item, search) {
 };
 
 SimpleSearch.filter = function (data, searchString) {
+  var result = [],
+      len,
+      i;
+
+  for (i = 0, len = data.length; i < len; i++) {
+    if (SimpleSearch.matches(data[i], searchString)) {
+      result.push(data[i]);
+    }
+  }
+
+  return result;
 };
 
 module.exports = SimpleSearch;
