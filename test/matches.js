@@ -8,7 +8,7 @@ describe('SimpleSearch', function () {
       search.matches('foo', 'foo').should.be.true;
     });
 
-    it('should return true for inexact matches', function () {
+    it('should return true for incomplete matches', function () {
       search.matches('bar', 'ar').should.be.true;
       search.matches('bar', 'br').should.be.true;
     });
