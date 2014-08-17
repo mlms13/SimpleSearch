@@ -34,6 +34,7 @@ describe('SimpleSearch', function () {
 
     it('should ignore non-alphanumeric characters', function () {
       search.matches('foobar', '(foo)').should.be.true;
+      search.matches('foobar', 'foo?').should.be.true;
       search.matches('foobar', 'foo-bar').should.be.true;
       search.matches('foo.bar', 'foobar').should.be.true;
       search.matches('foobar', 'f00').should.be.false;
