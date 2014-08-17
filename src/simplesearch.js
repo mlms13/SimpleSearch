@@ -1,7 +1,8 @@
 var SimpleSearch = {};
 
 SimpleSearch.matches = function (item, search) {
-  var matchIndex = item.indexOf(search.charAt(0));
+  var currentChar = search.charAt(0).toLowerCase(),
+      matchIndex = item.toLowerCase().indexOf(currentChar);
 
   // return false if the current character of `search` is not found
   // in the remaining subset of `item`
