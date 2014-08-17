@@ -1,0 +1,32 @@
+{
+  "name": "SimpleSearch",
+  "version": "0.0.0",
+  "description": "Powerful list searching in simple packaging",
+  "main": "src/simplesearch.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mlms13/SimpleSearch.git"
+  },
+  "keywords": [
+    "string search",
+    "text search",
+    "match string",
+    "filter"
+  ],
+  "author": "Michael Martin-Smucker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mlms13/SimpleSearch/issues"
+  },
+  "homepage": "https://github.com/mlms13/SimpleSearch",
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
+  }
+}
