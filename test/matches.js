@@ -31,6 +31,7 @@ describe('SimpleSearch', function () {
     it('should ignore spaces in the search string', function () {
       search.matches('foobar', 'foo bar').should.be.true;
       search.matches('foobar', 'f o o b a r').should.be.true;
+      search.matches('foo bar', 'fo o').should.be.true;
     });
 
     it('should ignore non-alphanumeric characters', function () {

@@ -23,15 +23,21 @@ SimpleSearch.matches = function (item, search) {
   // loop through each letter in `search`, ensuring it matches
   for (i = 0, len = search.length; i < len; i++) {
     currentChar = search.charAt(i).toLowerCase();
-    matchIndex = _item.indexOf(currentChar);
 
-    // return false if the current character of `search` is alphanumeric
-    // and it is not found after the previously matched character
-    if (SimpleSearch.isAlphaNumeric(currentChar) && matchIndex < 0) {
-      return false;
+    if (SimpleSearch.isAlphaNumeric(currentChar)) {
+      matchIndex = _item.indexOf(currentChar);
+
+      // return false if the current character of `search` is alphanumeric
+      // and it is not found after the previously matched character
+      if (matchIndex < 0) {
+        return false;
+      }
+
+      // item becomes only the characters after the current match
+      // so `br` matches `bar` but `rb` doesn't
+      _item = _item.substring(matchIndex + 1);
     }
 
-    _item = _item.substring(matchIndex + 1);
   }
 
   return true;
