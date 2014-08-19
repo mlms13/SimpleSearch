@@ -24,20 +24,20 @@ SimpleSearch.matches = function (item, search) {
   for (i = 0, len = search.length; i < len; i++) {
     currentChar = search.charAt(i).toLowerCase();
 
-    if (SimpleSearch.isAlphaNumeric(currentChar)) {
-      matchIndex = _item.indexOf(currentChar);
+    // ignore non-alphanumeric characters completely
+    if (!SimpleSearch.isAlphaNumeric(currentChar)) continue;
 
-      // return false if the current character of `search` is alphanumeric
-      // and it is not found after the previously matched character
-      if (matchIndex < 0) {
-        return false;
-      }
+    // return false if the current character of `search`
+    // does not exist in the remaining characters of _item
+    matchIndex = _item.indexOf(currentChar);
 
-      // item becomes only the characters after the current match
-      // so `br` matches `bar` but `rb` doesn't
-      _item = _item.substring(matchIndex + 1);
+    if (matchIndex < 0) {
+      return false;
     }
 
+    // item becomes only the characters after the current match
+    // so `br` matches `bar` but `rb` doesn't
+    _item = _item.substring(matchIndex + 1);
   }
 
   return true;
