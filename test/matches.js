@@ -6,6 +6,7 @@ describe('SimpleSearch', function () {
     it('should return true when search string is found', function () {
       search.matches('foo', 'f').should.be.true;
       search.matches('foo', 'foo').should.be.true;
+      search.matches('foo foo', 'foo foo').should.be.true;
     });
 
     it('should return true for incomplete matches', function () {
@@ -43,12 +44,15 @@ describe('SimpleSearch', function () {
     it('should match regardless of word order', function () {
       search.matches('foo bar', 'bar foo').should.be.true;
       search.matches('bar (foo)', 'foobar').should.be.true;
+      search.matches('those these', 'the the').should.be.true;
+      search.matches('cat car', 'car cat').should.be.true;
     });
 
     it('should not re-match to previously-matched words', function () {
       // after checking "bar", then switching to "foo"
       // you can't just jump back to bar
       search.matches('foo bar', 'ba foo r').should.be.false;
+      search.matches('those these', 'thee thes').should.be.false;
     });
   });
 });
