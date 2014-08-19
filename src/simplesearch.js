@@ -17,28 +17,24 @@ SimpleSearch.isAlphaNumeric = function (str) {
 };
 
 SimpleSearch.matches = function (item, search) {
-  var currentChar = search.charAt(0).toLowerCase(),
-      matchIndex = item.toLowerCase().indexOf(currentChar);
+  var _item = item.toLowerCase(),
+      currentChar, matchIndex, i, len;
 
-  // return false if the current character of `search` is alphanumeric
-  // and it is not found in the remaining subset of `item`
-  if (SimpleSearch.isAlphaNumeric(currentChar) && matchIndex < 0) {
-    return false;
+  // loop through each letter in `search`, ensuring it matches
+  for (i = 0, len = search.length; i < len; i++) {
+    currentChar = search.charAt(i).toLowerCase();
+    matchIndex = _item.indexOf(currentChar);
+
+    // return false if the current character of `search` is alphanumeric
+    // and it is not found after the previously matched character
+    if (SimpleSearch.isAlphaNumeric(currentChar) && matchIndex < 0) {
+      return false;
+    }
+
+    _item = _item.substring(matchIndex + 1);
   }
 
-  // if we made it this far and there are no remaining characters
-  // in our search string, it's a match
-  if (search.length <= 1) {
-    return true;
-  }
-
-  // otherwise, trim our original `item` to include only characters
-  // after the current position. this causes "br" to match "bar"
-  // but "rb" will not match "bar" because the order is wrong.
-  item = item.substring(matchIndex + 1);
-
-  // then recursively keep checking each letter in `search`
-  return SimpleSearch.matches(item, search.substring(1));
+  return true;
 };
 
 SimpleSearch.filter = function (data, searchString) {
