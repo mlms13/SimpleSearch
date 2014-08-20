@@ -18,6 +18,7 @@ SimpleSearch.isAlphaNumeric = function (str) {
 
 SimpleSearch.matches = function (item, search) {
   var _item = item.toLowerCase(),
+      prevMatch = -1,
       currentChar, matchIndex, i, len;
 
   // loop through each letter in `search`, ensuring it matches
@@ -29,15 +30,14 @@ SimpleSearch.matches = function (item, search) {
 
     // return false if the current character of `search`
     // does not exist in the remaining characters of _item
-    matchIndex = _item.indexOf(currentChar);
+    matchIndex = _item.indexOf(currentChar, prevMatch + 1);
 
     if (matchIndex < 0) {
       return false;
     }
 
-    // item becomes only the characters after the current match
-    // so `br` matches `bar` but `rb` doesn't
-    _item = _item.substring(matchIndex + 1);
+    // if a match was found, update the index for the next round
+    prevMatch = matchIndex;
   }
 
   return true;
