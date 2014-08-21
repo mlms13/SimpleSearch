@@ -49,6 +49,10 @@ describe('SimpleSearch', function () {
       search.matches('cat car', 'car cat').should.be.true;
     });
 
+    it.skip('should fail with repeated partial matches', function () {
+      search.matches('cat car', 'ca ca ca ca').should.be.false;
+    });
+
     it('should not re-match to previously-matched words', function () {
       // after checking "bar", then switching to "foo"
       // you can't just jump back to bar
