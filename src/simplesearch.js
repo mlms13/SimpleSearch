@@ -1,6 +1,6 @@
 var SimpleSearch = {};
 
-SimpleSearch.isAlphaNumeric = function (str) {
+SimpleSearch._isAlphaNumeric = function (str) {
   var code, i, len;
 
   // iterating and checking charCode is uglier but faster than regexp
@@ -16,7 +16,7 @@ SimpleSearch.isAlphaNumeric = function (str) {
   return true;
 };
 
-SimpleSearch.matchSingleWord = function (word, search) {
+SimpleSearch._matchSingleWord = function (word, search) {
   var prevMatch = -1,
       currentChar, matchIndex, i, len;
 
@@ -25,7 +25,7 @@ SimpleSearch.matchSingleWord = function (word, search) {
     currentChar = search.charAt(i).toLowerCase();
 
     // ignore non-alphanumeric characters completely
-    if (!SimpleSearch.isAlphaNumeric(currentChar)) continue;
+    if (!SimpleSearch._isAlphaNumeric(currentChar)) continue;
 
     // return false if the current character of `search`
     // does not exist in the remaining characters of _item
@@ -42,7 +42,7 @@ SimpleSearch.matchSingleWord = function (word, search) {
   return true;
 };
 
-SimpleSearch.matchMultipleWords = function (words, search) {
+SimpleSearch._matchMultipleWords = function (words, search) {
   var currentMatches = [],
       prevMatches = [],
       i, j, sLen, wLen;
@@ -56,7 +56,7 @@ SimpleSearch.matchMultipleWords = function (words, search) {
     for (j = 0, wLen = words.length; j < wLen; j++) {
       // FIXME: this is inefficient. we only need to check words that
       // matched the last time through
-      if (SimpleSearch.matchSingleWord(words[j], search.substring(0, i + 1))) {
+      if (SimpleSearch._matchSingleWord(words[j], search.substring(0, i + 1))) {
         currentMatches.push(j);
         addedWords = true;
       }
@@ -72,7 +72,7 @@ SimpleSearch.matchMultipleWords = function (words, search) {
         // if we matched multiple partial words, we can't know
         // for sure which one to remove. for now, don't remove either.
         // just keep checking the remaining search characters
-        return SimpleSearch.matchMultipleWords(words, search.substring(i));
+        return SimpleSearch._matchMultipleWords(words, search.substring(i));
       } else {
         // there was exactly one matching word, so remove it
         words.splice(prevMatches[0], 1);
@@ -83,8 +83,8 @@ SimpleSearch.matchMultipleWords = function (words, search) {
         // if there are still multiple words, recurse
         // otherwise, simply match a single word with the remaining string
         return words.length > 1 ?
-          SimpleSearch.matchMultipleWords(words, search) :
-          SimpleSearch.matchSingleWord(words[0], search);
+          SimpleSearch._matchMultipleWords(words, search) :
+          SimpleSearch._matchSingleWord(words[0], search);
       }
     }
 
@@ -99,8 +99,8 @@ SimpleSearch.matches = function (item, search) {
   var items = item.toLowerCase().split(' ');
 
   return items.length > 1 ?
-    SimpleSearch.matchMultipleWords(items, search) :
-    SimpleSearch.matchSingleWord(items[0], search);
+    SimpleSearch._matchMultipleWords(items, search) :
+    SimpleSearch._matchSingleWord(items[0], search);
 };
 
 SimpleSearch.filter = function (data, searchString) {

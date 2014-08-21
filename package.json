@@ -2,7 +2,7 @@
   "name": "SimpleSearch",
   "version": "0.0.0",
   "description": "Powerful list searching in simple packaging",
-  "main": "src/simplesearch.js",
+  "main": "dist/simplesearch.js",
   "directories": {
     "test": "test"
   },
