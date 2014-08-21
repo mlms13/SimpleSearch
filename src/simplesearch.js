@@ -116,5 +116,3 @@ SimpleSearch.filter = function (data, searchString) {
 
   return result;
 };
-
-module.exports = SimpleSearch;

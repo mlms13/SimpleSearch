@@ -1,3 +1,7 @@
+# Compiled files
+# Forcefully commit this folder only when making a release
+dist
+
 # Logs
 logs
 *.log
