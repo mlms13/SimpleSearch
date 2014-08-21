@@ -1,5 +1,16 @@
+/**
+ * @module SimpleSearch
+ * @type {Object} The SimpleSearch object defines several useful methods related
+ *  to filtering and matching text. Methods prefixed with _ are private.
+ */
 var SimpleSearch = {};
 
+/**
+ * Test a string to see if all characters are alphanumeric.
+ * @param  {string}  str - The text to be tested
+ * @return {Boolean}
+ * @private
+ */
 SimpleSearch._isAlphaNumeric = function (str) {
   var code, i, len;
 
@@ -16,6 +27,14 @@ SimpleSearch._isAlphaNumeric = function (str) {
   return true;
 };
 
+/**
+ * Compare a search string against a single target word.
+ * @param  {string} word   - The target string, which will be searched for
+ *                           matching characters
+ * @param  {string} search - The string of characters we are searching for
+ * @return {Boolean}
+ * @private
+ */
 SimpleSearch._matchSingleWord = function (word, search) {
   var prevMatch = -1,
       currentChar, matchIndex, i, len;
@@ -42,6 +61,13 @@ SimpleSearch._matchSingleWord = function (word, search) {
   return true;
 };
 
+/**
+ * Compare a search string against multiple target words, ignoring word order.
+ * @param  {string[]} words - Array of words to be searched
+ * @param  {string} search  - The string of characters we are searching for
+ * @return {Boolean}
+ * @private
+ */
 SimpleSearch._matchMultipleWords = function (words, search) {
   var currentMatches = [],
       prevMatches = [],
@@ -58,7 +84,6 @@ SimpleSearch._matchMultipleWords = function (words, search) {
       // matched the last time through
       if (SimpleSearch._matchSingleWord(words[j], search.substring(0, i + 1))) {
         currentMatches.push(j);
-        addedWords = true;
       }
     }
 
@@ -68,10 +93,8 @@ SimpleSearch._matchMultipleWords = function (words, search) {
         // if there were no previous matches, the match failed
         return false;
       } else if (prevMatches.length > 1) {
-        // FIXME: shit. not really sure how to handle this.
         // if we matched multiple partial words, we can't know
         // for sure which one to remove. for now, don't remove either.
-        // just keep checking the remaining search characters
         return SimpleSearch._matchMultipleWords(words, search.substring(i));
       } else {
         // there was exactly one matching word, so remove it
@@ -95,6 +118,14 @@ SimpleSearch._matchMultipleWords = function (words, search) {
   return true;
 };
 
+/**
+ * Determine whether the search string is contained in item, regardless of
+ * item's word order.
+ * @param  {string} item - The string to be searched for matches
+ * @param  {string} search - The string of characters we are searching for
+ * @return {Boolean}
+ * @public
+ */
 SimpleSearch.matches = function (item, search) {
   var items = item.toLowerCase().split(' ');
 
@@ -103,13 +134,20 @@ SimpleSearch.matches = function (item, search) {
     SimpleSearch._matchSingleWord(items[0], search);
 };
 
-SimpleSearch.filter = function (data, searchString) {
+/**
+ * Given a search string, filter an array of strings using our string-matching
+ * algorithm that is flexible about partial matches and word order.
+ * @param  {string[]} data - Array of strings that will be filtered
+ * @param  {string} search - The string of characters we are searching for
+ * @return {string[]} - A new array, a subset of the original data
+ */
+SimpleSearch.filter = function (data, search) {
   var result = [],
       len,
       i;
 
   for (i = 0, len = data.length; i < len; i++) {
-    if (SimpleSearch.matches(data[i], searchString)) {
+    if (SimpleSearch.matches(data[i], search)) {
       result.push(data[i]);
     }
   }

@@ -1,10 +1,14 @@
-var gulp = require('gulp'),
-    seq  = require('run-sequence');
+var gulp  = require('gulp'),
+    seq   = require('run-sequence'),
+    clean = require('rimraf');
 
-gulp.task('clean', function (cb) {
-    var clean = require('rimraf');
+gulp.task('clean:dist', function (cb) {
     clean('./dist', cb);
 });
+
+gulp.task('clean:docs', function (cb) {
+    clean('./docs/simplesearch.md', cb);
+})
 
 gulp.task('hint', function () {
     var jshint = require('gulp-jshint'),
@@ -15,7 +19,7 @@ gulp.task('hint', function () {
         .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('js', ['clean', 'hint'], function () {
+gulp.task('js', ['clean:dist', 'hint'], function () {
     var wrap = require('gulp-wrap-umd'),
         streamify = require('gulp-streamify'),
         uglify = require('gulp-uglify'),
@@ -32,7 +36,13 @@ gulp.task('js', ['clean', 'hint'], function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('test', function () {
+gulp.task('docs', ['clean:docs'], function (cb) {
+    var jsdox = require('jsdox');
+
+    jsdox.generateForDir('src', 'docs', null, cb);
+});
+
+gulp.task('test', ['clean:docs'], function () {
     var mocha = require('gulp-mocha');
 
     gulp.src('./test/**/*.js', {read: false})
@@ -40,10 +50,10 @@ gulp.task('test', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./src/**/*.js'], ['js']);
+    gulp.watch(['./src/**/*.js'], ['js', 'docs']);
     gulp.watch(['./dist/simplesearch.js', './test/**/*.js'], ['test']);
 });
 
 gulp.task('default', function () {
-    seq('js', ['test', 'watch']);
+    seq('js', ['test', 'docs', 'watch']);
 });
