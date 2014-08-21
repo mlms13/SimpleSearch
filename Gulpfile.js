@@ -1,4 +1,5 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    seq  = require('run-sequence');
 
 gulp.task('clean', function (cb) {
     var clean = require('rimraf');
@@ -31,8 +32,18 @@ gulp.task('js', ['clean', 'hint'], function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch('./src/**/*.js', ['js']);
+gulp.task('test', function () {
+    var mocha = require('gulp-mocha');
+
+    gulp.src('./test/**/*.js', {read: false})
+        .pipe(mocha());
 });
 
-gulp.task('default', ['js', 'watch']);
+gulp.task('watch', function () {
+    gulp.watch(['./src/**/*.js'], ['js']);
+    gulp.watch(['./dist/simplesearch.js', './test/**/*.js'], ['test']);
+});
+
+gulp.task('default', function () {
+    seq('js', ['test', 'watch']);
+});
