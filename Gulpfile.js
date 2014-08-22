@@ -8,7 +8,7 @@ gulp.task('clean:dist', function (cb) {
 
 gulp.task('clean:docs', function (cb) {
     clean('./docs/simplesearch.md', cb);
-})
+});
 
 gulp.task('hint', function () {
     var jshint = require('gulp-jshint'),

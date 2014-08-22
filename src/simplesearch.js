@@ -69,36 +69,44 @@ SimpleSearch._matchSingleWord = function (word, search) {
  * @private
  */
 SimpleSearch._matchMultipleWords = function (words, search) {
-  var currentMatches = [],
-      prevMatches = [],
+  var matchIndexes, prevMatchIndexes, matchWords, prevMatchWords, stringToCheck,
       i, j, sLen, wLen;
 
   // for each letter in search, and for each word in our array
   // find all words that match every character up to this point
   for (i = 0, sLen = search.length; i < sLen; i++) {
     // keep track of whether we added words for this letter
-    currentMatches = [];
+    matchIndexes = [];
+    matchWords = [];
 
-    for (j = 0, wLen = words.length; j < wLen; j++) {
-      // FIXME: this is inefficient. we only need to check words that
-      // matched the last time through
-      if (SimpleSearch._matchSingleWord(words[j], search.substring(0, i + 1))) {
-        currentMatches.push(j);
+    // initialize prevMatches, which is extra important the first time through
+    prevMatchIndexes = prevMatchIndexes || [];
+    prevMatchWords = prevMatchWords || words.slice(0);
+
+    // only check the words that passed last time (or all words on first run)
+    for (j = 0, wLen = prevMatchWords.length; j < wLen; j++) {
+      stringToCheck = search.substring(0, i + 1);
+
+      if (SimpleSearch._matchSingleWord(prevMatchWords[j], stringToCheck)) {
+        // after the first round, refer back to our stored index, because we
+        // want to know where to find the word in the original `words`
+        matchIndexes.push(i > 0 ? prevMatchIndexes[j] : j);
+        matchWords.push(prevMatchWords[j]);
       }
     }
 
     // if there are no more matches
-    if (!currentMatches.length) {
-      if (!prevMatches.length) {
+    if (!matchIndexes.length) {
+      if (!prevMatchIndexes.length) {
         // if there were no previous matches, the match failed
         return false;
-      } else if (prevMatches.length > 1) {
+      } else if (prevMatchIndexes.length > 1) {
         // if we matched multiple partial words, we can't know
         // for sure which one to remove. for now, don't remove either.
         return SimpleSearch._matchMultipleWords(words, search.substring(i));
       } else {
         // there was exactly one matching word, so remove it
-        words.splice(prevMatches[0], 1);
+        words.splice(prevMatchIndexes[0], 1);
 
         // and trim our search string, since we're done with this round
         search = search.substring(i);
@@ -111,7 +119,8 @@ SimpleSearch._matchMultipleWords = function (words, search) {
       }
     }
 
-    prevMatches = currentMatches.slice(0);
+    prevMatchWords = matchWords.slice(0);
+    prevMatchIndexes = matchIndexes.slice(0);
   }
 
   // as always, return true if we run out of search characters
