@@ -1,5 +1,6 @@
 {
-  "name": "SimpleSearch",
+  "name": "simplesearch",
+  "title": "SimpleSearch",
   "version": "0.0.0",
   "description": "Powerful list searching in simple packaging",
   "main": "dist/simplesearch.js",
@@ -7,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha ./test/*.js"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -19,12 +20,19 @@
     "match string",
     "filter"
   ],
-  "author": "Michael Martin-Smucker",
-  "license": "MIT",
+  "author": {
+    "name": "Michael Martin-Smucker",
+    "url": "http://martinsmucker.com"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/mlms13/SimpleSearch/blob/master/LICENSE"
+  },
   "bugs": {
     "url": "https://github.com/mlms13/SimpleSearch/issues"
   },
   "homepage": "https://github.com/mlms13/SimpleSearch",
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.8.7",
     "gulp-jshint": "^1.8.4",
