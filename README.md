@@ -1,13 +1,50 @@
 # SimpleSearch
 
-SimpleSearch ~~is~~ *will soon be* a powerful way to filter an array for matched (and approximately matched) strings.
+SimpleSearch is becoming a powerful JavaScript tool to filter an array for matched (and approximately matched) strings.
 
 ## Installation and Setup
 
-- SimpleSearch is not yet available on npm. It will be.
-- We use UMD to maintain compatibility with several popular module systems
-  - If you use CommonJS (Node, Browserify) or AMD (Require), require SimpleSearch as you would any other module
-  - If you are not using a module loader, include SimpleSearch.js in a script tag, and it will make a global `window.SimpleSearch` available
+We use UMD to maintain compatibility with several popular module systems.
+
+### CommonJS Setup (for environments like Node.js and Browserify)
+
+Install SimpleSearch...
+
+```
+npm install --save simplesearch
+```
+
+...and require it in your project
+
+```javascript
+var SimpleSearch = require('simplesearch');
+SimpleSearch.filter(...);
+```
+
+### AMD Setup (for Require.JS)
+
+**Disclaimer:** it's been awhile since I've used Require.JS, and I'm no expert. This method is currently untested, but it should work.
+
+Install SimpleSearch by downloading a [tagged release](https://github.com/mlms13/SimpleSearch/releases). Or you could install with npm and dig it out of the `node_modules` folder... I don't really know the preferred way to do package management in AMD environments.
+
+Then, start using it like this:
+
+```javascript
+require(['path/to/simplesearch.js'], function(SimpleSearch) {
+  SimpleSearch.filter(...);
+});
+```
+
+### No module loader? No problem.
+
+If you're just looking to dump a script into your page, we can work with that. Start by [downloading the latest release](https://github.com/mlms13/SimpleSearch/releases).
+
+```html
+<script src="/path/to/simplesearch.js"></script>
+<script>
+  window.SimpleSearch.filter(...);
+</script>
+```
 
 ## Configuration
 
