@@ -46,16 +46,41 @@ If you're just looking to dump a script into your page, we can work with that. S
 </script>
 ```
 
-## Configuration
+## Usage
 
-In its simplest form:
+SimpleSearch comes with two public methods. The [full documentation](https://github.com/mlms13/SimpleSearch/blob/master/docs/simplesearch.md) also covers private methods, but you shouldn't use those. The following should be enough to get you started.
+
+### Filter(data, search)
+
+Given an array as the first paramater and a string of search text as the second, `filter` will return a new array that is a subset of the original. The results are filtered according to the match criteria listed in the next section.
 
 ```javascript
-// filter(data, searchText)
 var result = SimpleSearch.filter(["foo", "bar", "baz"], "ba");
 // result: ["bar", "baz"]
 ```
-For any search more complex than that, pass a configuration object to `filter` instead:
+
+### Matches(item, search)
+
+Internally, the `filter` function passes each item through `SimpleSearch.matches()`, which is publicly available.
+
+```javascript
+var matches = SimpleSearch.matches('foobar', 'fbr');
+// matches: true
+```
+
+This function returns `true` or `false` for matches according to the following rules:
+
+- Matches can occur anywhere in the string, so `SimpleSearch.matches('bar', 'a'); // true`
+- The search string can leave out characters, so `SimpleSearch.matchs('bar', 'br'); // true`
+- Search string cannot switch character order, so `SimpleSearch.matchs('bar', 'rb'); // false`
+- Non-alphanumeric characters in the search string (including spaces) are ignored, so `SimpleSearch.matches('bar', '(b a.r)'); //true`
+- Word order of the target doesn't matter, so `SimpleSearch.matches('bar foo', 'foobar'); // true`
+
+## Roadmap
+
+The `matches` function has some hard-coded rules about how spaces, special characters, text case, and word order work.  All of that will soon be configurable.
+
+Filter currently only handles arrays of strings. Filtering an array of objects is coming next.
 
 ```javascript
 // data as an array of objects instead of strings
@@ -68,7 +93,11 @@ var data = [{
 }, {
   name: "apple, raw"
 }];
+```
 
+Instead of passing an array and a search string to `filter`, you will be able to pass a big configuration object.
+
+```javascript
 // filter(obj)
 SimpleSearch.filter({
   data: data,
@@ -92,19 +121,7 @@ SimpleSearch.filter({
 });
 ```
 
-## Roadmap
-
-### Lofty goals for a simple project:
-
-Given initial data of `["barley", "beans (lima)", "beans (pinto)", "beer", "bulgar"]`
-
-- searching "b" should return all items
-- searching "bl" should return "barley", "beans (lima)", and "bulgar"
-- searching "eb" should return no results
-- searching "lima beans" should return "beans (lima)"
-- searching "b e e" should return "beer" (ignore extra spaces)
-
-### Even loftier:
+Farther future, we're looking into the Levenshtein algorithm to do fuzzy matching. This way, we'll be able to:
 
 - Give each match a score, based on similarity to the search term
-- Sort by score before returning array (and before calling success/fail callback functions)
+- Sort by score before returning the filtered array (and before calling success/fail callback functions)
