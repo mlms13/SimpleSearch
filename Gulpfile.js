@@ -42,7 +42,7 @@ gulp.task('docs', ['clean:docs'], function (cb) {
     jsdox.generateForDir('src', 'docs', null, cb);
 });
 
-gulp.task('test', ['clean:docs'], function () {
+gulp.task('test', function () {
     var mocha = require('gulp-mocha');
 
     gulp.src('./test/**/*.js', {read: false})
