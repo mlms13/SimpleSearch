@@ -1,4 +1,5 @@
 var gulp  = require('gulp'),
+    gutil = require('gulp-util'),
     seq   = require('run-sequence'),
     clean = require('rimraf');
 
@@ -56,4 +57,41 @@ gulp.task('watch', function () {
 
 gulp.task('default', function () {
     seq('js', ['test', 'docs', 'watch']);
+});
+
+
+// everything we need to push a release to npm
+gulp.task('release', ['js'], function () {
+    var shell = require('shelljs'),
+        type = gutil.env.major ? "major" :
+            gutil.env.minor ? "minor" : "patch";
+
+    if (!shell.which('git') || !shell.which('npm')) {
+        console.error('You need git and npm installed to make a release');
+        shell.exit(1);
+    }
+
+    // forcefully commit our ./dist folder for releases
+    if (shell.exec('git add --force  ./dist').code !== 0) {
+        console.error('Failed to add build directory to commit');
+        shell.exit(1);
+    }
+
+    if (shell.exec('git commit -m "Compiled files for release"').code !== 0) {
+        console.error('Failed to commit our compiled files');
+        shell.exit(1);
+    }
+
+    // use npm to bump package version, add tags, and make the commit
+    if (shell.exec('npm version ' + type).code !== 0) {
+        console.error('Failed to commit changes with `npm version`');
+        shell.exit(1);
+    }
+
+    // attempt to publish the most recently tagged version
+    if (shell.exec('npm publish .').code !== 0) {
+        console.error('Failed to publish package to npm,');
+        shell.exit(1);
+    }
+
 });

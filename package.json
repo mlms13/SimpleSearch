@@ -40,12 +40,14 @@
     "gulp-rename": "^1.2.0",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.1",
+    "gulp-util": "^3.0.0",
     "gulp-wrap-umd": "^0.2.1",
     "jsdox": "^0.4.1",
     "jshint-stylish": "^0.4.0",
     "mocha": "^1.21.4",
     "rimraf": "^2.2.8",
     "run-sequence": "^0.3.6",
+    "shelljs": "^0.3.0",
     "should": "^4.0.4"
   }
 }
