@@ -48,33 +48,54 @@ If you're just looking to dump a script into your page, we can work with that. S
 
 ## Usage
 
-SimpleSearch comes with two public methods. The [full documentation](https://github.com/mlms13/SimpleSearch/blob/master/docs/simplesearch.md) also covers private methods, but you shouldn't use those. The following should be enough to get you started.
+The SimpleSearch object defines two useful methods related to filtering and matching text.
 
-### Filter(data, search)
+### SimpleSearch.matches(item, search)
 
-Given an array as the first paramater and a string of search text as the second, `filter` will return a new array that is a subset of the original. The results are filtered according to the match criteria listed in the next section.
+Given an item to test against and a search string to look for, return true
+or false, depending on whether the match is found, according to our criteria:
+ - The search string can leave out characters
+ - Search string cannot get character order wrong
+ - Ignore spaces in the search string
+ - Ignore other non-alphanumeric characters in the search string
+ - Word order of the target item doesn't matter
 
-```javascript
-var result = SimpleSearch.filter(["foo", "bar", "baz"], "ba");
-// result: ["bar", "baz"]
+**Parameters**
+
+**item**: `string`, The string to be searched for matches
+
+**search**: `string`, The string of characters we are searching for
+
+**Returns**: `Boolean`
+
+**Example**:
+```js
+SimpleSearch.matches('foobar', 'fbr'); // returns true
+SimpleSearch.matches('foobar', 'bf'); // returns false
+SimpleSearch.matches('foo', 'f oo!'); // returns true
+SimpleSearch.matches('bar (foo)', foobar); // returns true
 ```
 
-### Matches(item, search)
 
-Internally, the `filter` function passes each item through `SimpleSearch.matches()`, which is publicly available.
+### SimpleSearch.filter(data, search)
 
-```javascript
-var matches = SimpleSearch.matches('foobar', 'fbr');
-// matches: true
+Given an array as the first paramater and a string of search text as the
+second, filter() will return a new array that is a subset of the original.
+The results are filtered according to the criteria listed for matches().
+
+**Parameters**
+
+**data**: `Array.&lt;string&gt;`, Array of strings that will be filtered
+
+**search**: `string`, The string of characters we are searching for
+
+**Returns**: `Array.&lt;string&gt;`, - A new array, a subset of the original data
+
+**Example**:
+```js
+SimpleSearch.filter(["foo", "bar", "baz"], "ba"); // returns ["bar", "baz"]
 ```
 
-This function returns `true` or `false` for matches according to the following rules:
-
-- Matches can occur anywhere in the string, so `SimpleSearch.matches('bar', 'a'); // true`
-- The search string can leave out characters, so `SimpleSearch.matchs('bar', 'br'); // true`
-- Search string cannot switch character order, so `SimpleSearch.matchs('bar', 'rb'); // false`
-- Non-alphanumeric characters in the search string (including spaces) are ignored, so `SimpleSearch.matches('bar', '(b a.r)'); //true`
-- Word order of the target doesn't matter, so `SimpleSearch.matches('bar foo', 'foobar'); // true`
 
 ## Roadmap
 

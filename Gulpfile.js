@@ -38,9 +38,23 @@ gulp.task('js', ['clean:dist', 'hint'], function () {
 });
 
 gulp.task('docs', ['clean:docs'], function (cb) {
-    var jsdox = require('jsdox');
+    var parse = require('jsdoc3-parser'),
+        jsdox = require('jsdox'),
+        replace = require('gulp-replace');
 
-    jsdox.generateForDir('src', 'docs', null, cb);
+    parse('./src/simplesearch.js', function (err, data) {
+        if (err) throw new Error(err);
+
+        var md = jsdox.generateMD(jsdox.analyze(data, {}), './templates');
+
+        gulp.src('./README.md')
+            .pipe(replace(/## Usage(.|\n)*##/, md + '##'))
+            .pipe(gulp.dest('./'))
+            .on('end', cb);
+
+    });
+
+    //jsdox.generateForDir('src', 'docs', null, cb);
 });
 
 gulp.task('test', function () {
@@ -51,8 +65,9 @@ gulp.task('test', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./src/**/*.js'], ['js', 'docs']);
+    gulp.watch(['./src/**/*.js'], ['js']);
     gulp.watch(['./dist/simplesearch.js', './test/**/*.js'], ['test']);
+    gulp.watch(['./src/**/*.js', './templates/**/*'], ['docs']);
 });
 
 gulp.task('default', function () {

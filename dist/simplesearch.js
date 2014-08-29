@@ -11,8 +11,8 @@
 
 /**
  * @module SimpleSearch
- * @type {Object} The SimpleSearch object defines several useful methods related
- *  to filtering and matching text. Methods prefixed with _ are private.
+ * @type {Object} The SimpleSearch object defines two useful methods related
+ *  to filtering and matching text.
  */
 var SimpleSearch = {};
 
@@ -139,12 +139,23 @@ SimpleSearch._matchMultipleWords = function (words, search) {
 };
 
 /**
- * Determine whether the search string is contained in item, regardless of
- * item's word order.
+ * Given an item to test against and a search string to look for, return true
+ * or false, depending on whether the match is found, according to our criteria:
+ *  - The search string can leave out characters
+ *  - Search string cannot get character order wrong
+ *  - Ignore spaces in the search string
+ *  - Ignore other non-alphanumeric characters in the search string
+ *  - Word order of the target item doesn't matter
+ *
  * @param  {string} item - The string to be searched for matches
  * @param  {string} search - The string of characters we are searching for
  * @return {Boolean}
- * @public
+ *
+ * @example
+ * SimpleSearch.matches('foobar', 'fbr'); // returns true
+ * SimpleSearch.matches('foobar', 'bf'); // returns false
+ * SimpleSearch.matches('foo', 'f oo!'); // returns true
+ * SimpleSearch.matches('bar (foo)', foobar); // returns true
  */
 SimpleSearch.matches = function (item, search) {
   var items = item.toLowerCase().split(' ');
@@ -155,11 +166,16 @@ SimpleSearch.matches = function (item, search) {
 };
 
 /**
- * Given a search string, filter an array of strings using our string-matching
- * algorithm that is flexible about partial matches and word order.
+ * Given an array as the first paramater and a string of search text as the
+ * second, filter() will return a new array that is a subset of the original.
+ * The results are filtered according to the criteria listed for matches().
+ *
  * @param  {string[]} data - Array of strings that will be filtered
  * @param  {string} search - The string of characters we are searching for
  * @return {string[]} - A new array, a subset of the original data
+ *
+ * @example
+ * SimpleSearch.filter(["foo", "bar", "baz"], "ba"); // returns ["bar", "baz"]
  */
 SimpleSearch.filter = function (data, search) {
   var result = [],
