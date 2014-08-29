@@ -62,9 +62,9 @@ or false, depending on whether the match is found, according to our criteria:
 
 **Parameters**
 
-**item**: `string`, The string to be searched for matches
+- **item**: `string`, The string to be searched for matches
 
-**search**: `string`, The string of characters we are searching for
+- **search**: `string`, The string of characters we are searching for
 
 **Returns**: `Boolean`
 
@@ -85,9 +85,9 @@ The results are filtered according to the criteria listed for matches().
 
 **Parameters**
 
-**data**: `Array.&lt;string&gt;`, Array of strings that will be filtered
+- **data**: `Array.&lt;string&gt;`, Array of strings that will be filtered
 
-**search**: `string`, The string of characters we are searching for
+- **search**: `string`, The string of characters we are searching for
 
 **Returns**: `Array.&lt;string&gt;`, - A new array, a subset of the original data
 
