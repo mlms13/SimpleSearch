@@ -1,6 +1,7 @@
 # Compiled files
 # Forcefully commit this folder only when making a release
-dist
+# NPM ignores this if not present
+# dist
 
 # Logs
 logs
